@@ -1,0 +1,91 @@
+Actividad 6
+-Punto 4
+
+1. **Método constructor**  
+   - Este se ejecuta al crear un objeto para inicializar atributos.  
+   - Ubicación: 
+     • Medicamento.java – línea ~19 (constructor con parámetros).  
+     • Pastilla.java – línea ~8 (constructor con parámetros).  
+     • Jarabe.java – línea ~9 (constructor con parámetros).  
+     • Principal.java – múltiples new … (creación de objetos).
+     
+
+2. **Métodos de acceso (getters y setters)**  
+   - Estos me permiten leer o modificar atributos privados.  
+   - Ubicación:  
+     • Medicamento.java – líneas ~64 a ~76 (getSerial, setPeso, etc.).  
+     • Cliente.java – líneas ~18 a ~35, etc. (similar en todas las clases de modelo).
+     . Jarabe.java – líneas ~16 a ~23
+
+3. **Método toString()**  
+   - Me devuelven representación en texto del objeto.  
+   - Ubicación:  
+     • Medicamento.java – línea ~79.  
+     • Pastilla.java – línea ~47.  
+     • Jarabe.java – línea ~27.  
+     • (presente en casi todas las clases de modelado).
+
+4. **Modificador static**  
+   - Este pertenece a la clase, no a cada objeto.  
+   - Ubicación:  
+     • ConstantesFarmacia.java – línea ~4 (atributo VERSION es static).  
+     • Medicamento.java – línea ~5 (constante SISTEMA si la agregaste en requerimiento 3).
+
+5. **Modificador final**  
+   - Nos impide cambios o herencia.  
+   - Ubicación:  
+     • Medicamento.java – línea ~5 (`public static final String SISTEMA`).  
+     • Medicamento.java – línea ~38 (`public final String obtenerDescripcionBasica()`).  
+     • ConstantesFarmacia.java – línea ~3 (`public final class ConstantesFarmacia`).
+
+6. **Visibilidades (public, private, protected)**  
+   - Es el control de acceso a atributos/métodos.  
+   - Ubicación: en todas las clases, ej.:  
+     • Medicamento.java – atributos `private` peso, marca…  
+     • métodos `public` (getters), `protected` verificarIndicaciones.
+
+7. **Multiplicidades / Agregaciones**  
+   - Son las relacióne “tiene un/varios”.  
+   - Ubicación:  
+     • Composicionmedicamento.java – atributo `List<Ingrediente>` (1 composición → *muchos* ingredientes).  
+     • Factura.java – relación 1 Factura → 1 Cliente.
+
+8. **Sobreescritura de métodos (override)**  
+   - Este redefine comportamiento heredado.  
+   - Ubicación:  
+     • Pastilla.java – línea ~16 (`@Override public String mostrarInstrucciones`).  
+     • Jarabe.java – línea ~26 (`@Override public String toString`).  
+     • Pastillaliberacionprolongada.java – línea ~16 (override mostrarInstrucciones).
+
+9. **Sobrecarga de métodos**  
+   - Son varios métodos con el mismo nombre pero diferentes parámetros.  
+   - Ubicación:  
+     • Medicamento.java – líneas ~43-53 (`protected boolean verificarIndicaciones(String dosis)` y
+       `protected boolean verificarIndicaciones(String dosis, int edadPaciente)`).
+
+10. **Creación de objetos**  
+    - Explicación: instanciación con new.  
+    - Ubicación:  
+      • Principal.java – líneas a lo largo de main (new Marca, new Pastilla, etc.).
+
+11. **Herencia**  
+    - Explicación: una clase hereda atributos y métodos de otra.  
+    - Ubicación:  
+      • Pastilla.java – `extends Medicamento`.  
+      • Jarabe.java – `extends Medicamento`.  
+      • Pastillaliberacionprolongada.java – `extends Pastilla`.
+
+12. **Polimorfismo**  
+    - Explicación: un mismo método se comporta distinto según el objeto real.  
+    - Ubicación:  
+      • Principal.java – línea ~73 en adelante: arreglo `Medicamento[]` y llamadas
+        `m.mostrarInstrucciones()` muestran comportamiento diferente para cada subclase.  
+      • Método procesarMedicamento(Medicamento m) (parámetro de tipo superclase).
+
+-----------------------------------------
+Actividad 6: Polimorfismo 
+Paquete base: co.edu.poli.actividad5
+Estudiante: Brayan Alexander Lenis
+
+Punto 5.
+Link del repositorio: https://github.com/brayanalexanderlenis81/Trabajoparadigmas2.git
