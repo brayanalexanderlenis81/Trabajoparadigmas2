@@ -1,0 +1,13 @@
+# Eclipse / IDE
+.classpath
+.project
+.settings/
+# Compilados
+bin/
+target/
+out/
+build/
+# SO / temporales
+.DS_Store
+Thumbs.db
+*.log
