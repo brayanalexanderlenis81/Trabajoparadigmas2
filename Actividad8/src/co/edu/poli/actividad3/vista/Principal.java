@@ -1,8 +1,6 @@
 package co.edu.poli.actividad3.vista;
-
 import java.io.File;
 import java.util.Scanner;
-
 import co.edu.poli.actividad3.model.Medicamento;
 import co.edu.poli.actividad3.model.Pastilla;
 import co.edu.poli.actividad3.model.Jarabe;
@@ -16,7 +14,6 @@ public class Principal {
     private final Scanner sc = new Scanner(System.in);
     private final ImplementacionOperacionCRUD crud = new ImplementacionOperacionCRUD();
     private final OperacionArchivo archiver = new ArchivoMedicamentosBinario();
-
     private final String PATH = "./data";
     private final String NAME = "medicamentos.dat";
 
@@ -30,13 +27,13 @@ public class Principal {
             showMenu();
             op = readInt("Elige una opción: ");
             switch (op) {
-                case 1 -> crearMedicamento();          // Crear
-                case 2 -> listarTodos();               // Listar todos
-                case 3 -> listarUno();                 // Listar uno
-                case 4 -> guardarArchivo();            // Guardar archivo
-                case 5 -> leerArchivo();               // Leer archivo
-                case 6 -> modificar();                 // Modificar
-                case 7 -> eliminar();                  // Eliminar
+                case 1 -> crearMedicamento(); // Crear
+                case 2 -> listarTodos(); // Listar todos
+                case 3 -> listarUno(); // Listar uno
+                case 4 -> guardarArchivo(); // Guardar archivo
+                case 5 -> leerArchivo(); // Leer archivo
+                case 6 -> modificar(); // Modificar
+                case 7 -> eliminar(); // Eliminar
                 case 8 -> System.out.println("Saliendo..."); // Salir
                 default -> System.out.println("Opción inválida.");
             }
@@ -46,7 +43,7 @@ public class Principal {
 
     private void showMenu() {
         System.out.println("=======================================");
-        System.out.println("        ACTIVIDAD 8 - MENÚ CRUD        ");
+        System.out.println(" ACTIVIDAD 8 - MENÚ CRUD ");
         System.out.println("=======================================");
         System.out.println("1. Crear medicamento");
         System.out.println("2. Listar todos");
@@ -65,44 +62,36 @@ public class Principal {
         System.out.println("1) Pastilla");
         System.out.println("2) Jarabe");
         System.out.println("3) Pastilla de liberación prolongada");
-        int tipo = readInt("Selecciona (1-3): ");
 
-        String serialGenerado = generarSerial();
+        int tipo = readInt("Selecciona (1-3): ");
+        String serialIngresado = readString("Serial del medicamento: ");
         Medicamento nuevo = null;
 
         switch (tipo) {
             case 1 -> {
-                // Máx 5 primitivos: mg, cantidadPorCaja, esmasticable
                 double mg = readDouble("mg (double): ");
                 int cantidadPorCaja = readInt("cantidad por caja (int): ");
                 boolean esmasticable = readBoolean("¿es masticable? (true/false): ");
-
                 Pastilla p = new Pastilla();
-                setSerialSafe(p, serialGenerado);
-                // setters tolerantes por nombre
+                setSerialSafe(p, serialIngresado);
                 trySet(p, "setMg", double.class, mg);
                 trySet(p, "setCantidadporcaja", int.class, cantidadPorCaja);
                 trySet(p, "setEsmasticable", boolean.class, esmasticable);
                 nuevo = p;
             }
             case 2 -> {
-                // Máx 5 primitivos: volumenMl, incluyeDosificador
                 double volumenMl = readDouble("volumen (ml) (double): ");
                 boolean incluyeDosificador = readBoolean("¿incluye dosificador? (true/false): ");
-
                 Jarabe j = new Jarabe();
-                setSerialSafe(j, serialGenerado);
+                setSerialSafe(j, serialIngresado);
 
-                // Intentamos variantes comunes de nombres para que no truene:
-                // volumen
                 if (!trySet(j, "setVolumenml", double.class, volumenMl)) {
                     if (!trySet(j, "setVolumenMl", double.class, volumenMl)) {
                         trySet(j, "setVolumen", double.class, volumenMl);
                     }
                 }
-                // incluye dosificador
+
                 if (!trySet(j, "setIncluyedosificador", boolean.class, incluyeDosificador)) {
-                    // variantes con camel case o wrapper
                     if (!trySet(j, "setIncluyeDosificador", boolean.class, incluyeDosificador)) {
                         trySet(j, "setIncluyeDosificador", Boolean.class, incluyeDosificador);
                     }
@@ -110,16 +99,14 @@ public class Principal {
                 nuevo = j;
             }
             case 3 -> {
-                // Máx 5 primitivos: mg, cantidadPorCaja, horasLib
                 double mg = readDouble("mg (double): ");
                 int cantidadPorCaja = readInt("cantidad por caja (int): ");
                 int horasLib = readInt("horas de liberación (int): ");
-
                 Pastillaliberacionprolongada plp = new Pastillaliberacionprolongada();
-                setSerialSafe(plp, serialGenerado);
+                setSerialSafe(plp, serialIngresado);
                 trySet(plp, "setMg", double.class, mg);
                 trySet(plp, "setCantidadporcaja", int.class, cantidadPorCaja);
-                // horas liberación (posibles nombres)
+
                 if (!trySet(plp, "setHorasdeliberacion", int.class, horasLib)) {
                     trySet(plp, "setHorasDeLiberacion", int.class, horasLib);
                 }
@@ -130,7 +117,7 @@ public class Principal {
 
         if (nuevo != null) {
             System.out.println(crud.create(nuevo));
-            System.out.println("Serial autogenerado: " + serialGenerado);
+            System.out.println("Serial generado: " + serialIngresado);
         }
     }
 
@@ -151,8 +138,10 @@ public class Principal {
     private void listarUno() {
         String serial = readString("Ingresa el serial: ");
         Medicamento m = crud.readid(serial);
-        if (m == null) System.out.println("No se encontró.");
-        else System.out.println(m);
+        if (m == null)
+            System.out.println("No se encontró.");
+        else
+            System.out.println(m);
     }
 
     // ================== SAVE (SERIALIZE) ==================
@@ -168,7 +157,8 @@ public class Principal {
     private void leerArchivo() {
         Medicamento[] data = archiver.deserializar(PATH, NAME);
         for (Medicamento m : data) {
-            if (m != null) crud.create(m);
+            if (m != null)
+                crud.create(m);
         }
         System.out.println("Datos cargados desde archivo: " + data.length);
     }
@@ -182,7 +172,6 @@ public class Principal {
             return;
         }
 
-        // Pedimos valores y aplicamos según el TIPO concreto
         if (m instanceof Pastilla p) {
             double nuevoMg = readDouble("Nuevo mg (double): ");
             int nuevaCant = readInt("Nueva cantidad por caja (int): ");
@@ -212,29 +201,32 @@ public class Principal {
     private void eliminar() {
         String serial = readString("Serial a eliminar: ");
         Medicamento eliminado = crud.delete(serial);
-        if (eliminado == null) System.out.println("No se eliminó.");
-        else System.out.println("Eliminado: " + eliminado);
+        if (eliminado == null)
+            System.out.println("No se eliminó.");
+        else
+            System.out.println("Eliminado: " + eliminado);
     }
 
     // ================== Helpers ==================
-
-    private String generarSerial() {
-        return "MED-" + System.currentTimeMillis();
-    }
-
     private int readInt(String msg) {
         while (true) {
             System.out.print(msg);
-            try { return Integer.parseInt(sc.nextLine().trim()); }
-            catch (Exception e) { System.out.println("Valor inválido. Intenta de nuevo."); }
+            try {
+                return Integer.parseInt(sc.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Valor inválido. Intenta de nuevo.");
+            }
         }
     }
 
     private double readDouble(String msg) {
         while (true) {
             System.out.print(msg);
-            try { return Double.parseDouble(sc.nextLine().trim()); }
-            catch (Exception e) { System.out.println("Valor inválido. Intenta de nuevo."); }
+            try {
+                return Double.parseDouble(sc.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Valor inválido. Intenta de nuevo.");
+            }
         }
     }
 
@@ -242,7 +234,8 @@ public class Principal {
         while (true) {
             System.out.print(msg);
             String s = sc.nextLine().trim().toLowerCase();
-            if (s.equals("true") || s.equals("false")) return Boolean.parseBoolean(s);
+            if (s.equals("true") || s.equals("false"))
+                return Boolean.parseBoolean(s);
             System.out.println("Escribe true o false.");
         }
     }
@@ -252,8 +245,7 @@ public class Principal {
         return sc.nextLine().trim();
     }
 
-    // ====== Setters seguros (evitan reventar si tu setter tiene otro nombre/camel case) ======
-
+    // ====== Setters seguros ======
     private void setSerialSafe(Object obj, String serial) {
         if (!trySet(obj, "setSerial", String.class, serial)) {
             trySet(obj, "setSerials", String.class, serial);
